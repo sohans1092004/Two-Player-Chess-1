@@ -139,8 +139,30 @@ int main(void)
                 }
                 if (CurrRec.x == w[7].x && CurrRec.y == w[7].y)
                 {
-                    if (w[7].x == (GetMouseX() / 100) * 100 || w[7].y == (GetMouseY() / 100) * 100)
+                    if (w[7].x == x || w[7].y == y)
                     {
+                        int path=1;
+                        if(y<w[7].y){
+                            for(int i=(w[7].y/100)-1;i>(y/100);i--){
+                                if(positions[i][x/100] != 0) path=0;
+                            }
+                        }
+                        if(y>w[7].y){
+                            for(int i=(w[7].y/100)+1;i<(y/100);i++){
+                                if(positions[i][x/100] != 0) path=0;
+                            }
+                        }
+                        if(x>w[7].x){
+                            for(int i=(w[7].x/100)+1;i<(x/100);i++){
+                                if(positions[y/100][i] !=0) path=0;
+                            }
+                        }
+                        if(x<w[7].x){
+                            for(int i=(w[7].x/100)-1;i>(x/100);i--){
+                                if(positions[y/100][i] !=0) path=0;
+                            }
+                        }
+                        if(path){
                         for(int i=16;i<32;i++)
                         {
                             if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
@@ -148,11 +170,12 @@ int main(void)
                                 w[i].x=800;w[i].y=800;
                                 break;
                             }
-                        }  
+                        } 
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                         w[7].x = (GetMouseX() / 100) * 100;
                         w[7].y = (GetMouseY() / 100) * 100;
                         positions[y/100][x/100] = 1;
+                        }
                     }
                 }
                 if (CurrRec.x == w[1].x && CurrRec.y == w[1].y)
@@ -266,9 +289,30 @@ int main(void)
                 }
                 if (CurrRec.x == w[16].x && CurrRec.y == w[16].y)
                 {
-
                     if (w[16].x == (GetMouseX() / 100) * 100 || w[16].y == (GetMouseY() / 100) * 100)
                     {
+                        int path=1;
+                        if(y<w[16].y){
+                            for(int i=(w[16].y/100)-1;i>(y/100);i--){
+                                if(positions[i][x/100] != 0) path=0;
+                            }
+                        }
+                        if(y>w[16].y){
+                            for(int i=(w[16].y/100)+1;i<(y/100);i++){
+                                if(positions[i][x/100] != 0) path=0;
+                            }
+                        }
+                        if(x>w[16].x){
+                            for(int i=(w[16].x/100)+1;i<(x/100);i++){
+                                if(positions[y/100][i] !=0) path=0;
+                            }
+                        }
+                        if(x<w[16].x){
+                            for(int i=(w[16].x/100)-1;i>(x/100);i--){
+                                if(positions[y/100][i] !=0) path=0;
+                            }
+                        }
+                        if(path){
                         for(int i=0;i<8;i++)
                         {
                             if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
@@ -276,17 +320,40 @@ int main(void)
                                 w[i].x=800;w[i].y=800;
                                 break;
                             }
-                        }   
+                        }
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                         w[16].x = (GetMouseX() / 100) * 100;
                         w[16].y = (GetMouseY() / 100) * 100; 
-                            positions[y/100][x/100] = 1;
+                        positions[y/100][x/100] = 2;
+                        }
                     }
                 }
                 if (CurrRec.x == w[23].x && CurrRec.y == w[23].y)
                 {
                     if (w[23].x == (GetMouseX() / 100) * 100 || w[23].y == (GetMouseY() / 100) * 100)
                     {
+                        int path=1;
+                        if(y<w[23].y){
+                            for(int i=(w[23].y/100)-1;i>(y/100);i--){
+                                if(positions[i][x/100] != 0) path=0;
+                            }
+                        }
+                        if(y>w[23].y){
+                            for(int i=(w[23].y/100)+1;i<(y/100);i++){
+                                if(positions[i][x/100] != 0) path=0;
+                            }
+                        }
+                        if(x>w[23].x){
+                            for(int i=(w[23].x/100)+1;i<(x/100);i++){
+                                if(positions[y/100][i] !=0) path=0;
+                            }
+                        }
+                        if(x<w[23].x){
+                            for(int i=(w[23].x/100)-1;i>(x/100);i--){
+                                if(positions[y/100][i] !=0) path=0;
+                            }
+                        }
+                        if(path){
                         for(int i=0;i<8;i++)
                         {
                             if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
@@ -298,7 +365,8 @@ int main(void)
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                         w[23].x = (GetMouseX() / 100) * 100;
                         w[23].y = (GetMouseY() / 100) * 100;
-                        positions[y/100][x/100] = 1;
+                        positions[y/100][x/100] = 2;
+                        }
                     }
                 }
                 if (CurrRec.x == w[17].x && CurrRec.y == w[17].y)
@@ -317,13 +385,13 @@ int main(void)
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                          w[17].x = (GetMouseX() / 100) * 100;
                          w[17].y = (GetMouseY() / 100) * 100; 
-                            positions[y/100][x/100] = 1;
+                            positions[y/100][x/100] = 2;
                     }
                 }
                 if (CurrRec.x == w[22].x && CurrRec.y == w[22].y)
                 {
 
-                    if ((w[22].x != (GetMouseX() / 100) * 100) && (w[22].y != (GetMouseY() / 100) * 100) && abs(w[22].x - (GetMouseX() / 100) * 100) + abs(w[14].y - (GetMouseY() / 100) * 100) == 300)
+                    if ((w[22].x != x) && (w[22].y != y) && abs(w[22].x - x) + abs(w[22].y - y) == 300)
                     {
                         for(int i=0;i<8;i++)
                         {
@@ -336,7 +404,7 @@ int main(void)
                                 positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                                 w[22].x = (GetMouseX() / 100) * 100;
                                 w[22].y = (GetMouseY() / 100) * 100; 
-                                    positions[y/100][x/100] = 1;
+                                positions[y/100][x/100] = 2;
                     }
                 }
                 if (CurrRec.x == w[21].x && CurrRec.y == w[21].y)
@@ -354,7 +422,7 @@ int main(void)
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                                 w[21].x = (GetMouseX() / 100) * 100;
                                 w[21].y = (GetMouseY() / 100) * 100; 
-                                    positions[y/100][x/100] = 1;
+                                    positions[y/100][x/100] = 2;
                     }
                 }
                 if (CurrRec.x == w[18].x && CurrRec.y == w[18].y)
@@ -372,7 +440,7 @@ int main(void)
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                                 w[18].x = (GetMouseX() / 100) * 100;
                                 w[18].y = (GetMouseY() / 100) * 100;  
-                                    positions[y/100][x/100] = 1;
+                                    positions[y/100][x/100] = 2;
                     }
                 }
                 if (CurrRec.x == w[20].x && CurrRec.y == w[20].y)
@@ -391,7 +459,7 @@ int main(void)
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                                 w[20].x = (GetMouseX() / 100) * 100;
                                 w[20].y = (GetMouseY() / 100) * 100;    
-                                    positions[y/100][x/100] = 1;
+                                    positions[y/100][x/100] = 2;
                     }
                 }
                 if(CurrRec.x==w[19].x && CurrRec.y== w[19].y){
@@ -407,7 +475,7 @@ int main(void)
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
                                 w[19].x = (GetMouseX() / 100) * 100;
                                 w[19].y = (GetMouseY() / 100) * 100;
-                                    positions[y/100][x/100] = 1;
+                                    positions[y/100][x/100] = 2;
                     }
                 }
                 piecesel = 0;
