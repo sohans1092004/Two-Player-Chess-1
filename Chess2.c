@@ -519,7 +519,7 @@ int main(void)
                                 w[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 1;
                         }
-                        else if(w[j].y == y+100 && abs(w[j].x - x) == 100 && positions[y/100][x/100]==2){
+                        else if(w[j].y == y-100 && abs(w[j].x - x) == 100 && positions[y/100][x/100]==2){
                             for(int i=0;i<16;i++){
                                 if(x==w[i].x && y==w[i].y){
                                     w[i].x=800;w[i].y=800;
