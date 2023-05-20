@@ -18,8 +18,9 @@ int positions[8][8] = {{1, 1, 1, 1, 1, 1, 1, 1},
 // 1 -> black  2->white
 int piecesel = -1; // 1 for black piece selected , 2 for white piece selected , 
 Rectangle CurrRec = {100, 100, 100, 100};
-
-//---------------------------------------------------------------9
+int check2 = 0;
+int check1 = 0;
+//---------------------------------------------------------------
 // Module Function Declaration
 //---------------------------------------------------------------
 void UpdateGame();
@@ -27,7 +28,7 @@ void DrawBoard();
 int checkmove(int i, int x, int y);
 void move(int i, int x, int y);
 void revert(int i, int x, int y);
-
+bool check(Vector2 pos);
 int main()
 {
     InitWindow(screenWidth, screenHeight, "CHESS");
@@ -82,6 +83,12 @@ int main()
         DrawTextureEx(bpawn, pieces[30], 0, 1.5, WHITE);
         DrawTextureEx(bpawn, pieces[31], 0, 1.5, WHITE);
         DrawRectangleLinesEx(CurrRec, 5, BLUE);
+        if(check2 == 1){
+            DrawRectangleLines(pieces[4].x,pieces[4].y,100,100,RED);
+        }
+        if(check1 == 1){
+            DrawRectangleLines(pieces[20].x,pieces[20].y,100,100,RED);
+        }
         EndDrawing();
     }
     CloseWindow();
@@ -149,10 +156,35 @@ void UpdateGame()
                     {
                         move(i, x, y);
                     }
+                    if(piecesel==-2){
+                        Vector2 wkingpos = {pieces[4].x,pieces[4].y};
+                        if(check(wkingpos))
+                        {
+                            revert(i,x,y);
+                        }
+                    }
+                    else
+                    {
+                        Vector2 bkingpos = {pieces[20].x,pieces[20].y};
+                        if(check(bkingpos))
+                        {
+                            revert(i,x,y);
+                        }
+                    }
                 }
             }
         }
     }
+    Vector2 wkingpos={pieces[4].x,pieces[4].y};
+    if(check(wkingpos)){
+        check2=1;
+    }
+    else check2 = 0;
+    Vector2 bkingpos={pieces[20].x,pieces[20].y};
+    if(check(bkingpos)){
+        check1=1;
+    }
+    else check1 = 0;
 }
 
 int checkmove(int i, int x, int y)
@@ -362,7 +394,7 @@ int checkmove(int i, int x, int y)
     return 0;
 }
 
-int latestKill;
+int latestKill = 32;
 void move(int i, int x, int y)
 {
     for (int i = 0; i < 32; i++)
@@ -394,4 +426,170 @@ void revert(int i, int x, int y)
     pieces[latestKill].y = y;
     latestKill=32;
     }
+}
+
+bool check(Vector2 pos)
+{
+    int X = pos.x;
+    int Y = pos.y;
+    int j,k;
+    if (positions[Y / 100][X / 100] == 1)
+    {
+        j = 0;
+        k = 2;
+    }
+    if (positions[Y / 100][X / 100] == 2)
+    {
+        j = 16;
+        k = 1;
+    }
+    if ((abs(pos.x - pieces[1 + j].x) + abs(pos.y - pieces[1 + j].y) == 300 )&&(( pos.x - pieces[1 + j].x != 0) &&( pos.y - pieces[1 + j].y != 0)))
+    {
+        return true;
+    }
+    if (abs(pos.x - pieces[6 + j].x) + abs(pos.y - pieces[6 + j].y) == 300 && pos.x - pieces[6 + j].x != 0 && pos.y - pieces[6 + j].y != 0)
+    {
+        return true;
+    }
+    for (int i = X-100; i >= 0; i = i - 100)
+    {
+        if (positions[Y / 100][i / 100] == k)
+        {
+            if ((pieces[j].x == (i / 100) * 100 && pieces[j].y == (Y / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (Y / 100) * 100) || (pieces[7 + j].x == (i / 100) * 100 && pieces[7 + j].y == (Y / 100) * 100))
+            {
+                return true;
+            }
+            else
+                break;
+        }
+        else if (positions[Y / 100][i / 100] == 0)
+            continue;
+        else
+            break;
+    }
+    for (int i = X+100; i <= 700; i = i + 100)
+    {
+        if (positions[Y / 100][i / 100] == k)
+        {
+            if ((pieces[j].x == (i / 100) * 100 && pieces[j].y == (Y / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (Y / 100) * 100) || (pieces[7 + j].x == (i / 100) * 100 && pieces[7 + j].y == (Y / 100) * 100))
+            {
+                return true;
+            }
+            else
+                break;
+        }
+        else if (positions[Y / 100][i / 100] == 0)
+            continue;
+        else
+            break;
+    }
+    for (int i = Y-100; i >= 0; i = i - 100)
+    {
+        if (positions[i / 100][X / 100] == k)
+        {
+            if ((pieces[j].x == (X / 100) * 100 && pieces[j].y == (i / 100) * 100) || (pieces[3 + j].x == (X / 100) * 100 && pieces[3 + j].y == (i / 100) * 100) || (pieces[7 + j].x == (i / 100) * 100 && pieces[7 + j].y == (Y / 100) * 100))
+            {
+                return true;
+            }
+            else
+                break;
+        }
+        else if (positions[i / 100][X / 100] == 0)
+            continue;
+        else
+            break;
+    }
+    for (int i = Y+100; i <= 700; i = i + 100)
+    {
+        if (positions[i / 100][X / 100] == k)
+        {
+            if ((pieces[j].x == (X / 100) * 100 && pieces[j].y == (i / 100) * 100) || (pieces[3 + j].x == (X / 100) * 100 && pieces[3 + j].y == (i / 100) * 100) || (pieces[7 + j].x == (i / 100) * 100 && pieces[7 + j].y == (Y / 100) * 100))
+            {
+                return true;
+            }
+            else
+                break;
+        }
+        else if (positions[i / 100][X / 100] == 0)
+            continue;
+        else
+            break;
+    }
+    for (int i = X-100, t = Y-100; i >= 0 && t >= 0; i = i - 100, t = t - 100)
+    {
+        if (positions[t / 100][i / 100] == (k^3))
+            break;
+        else if (positions[t / 100][i / 100] == 0)
+            continue;
+        else
+        {
+            if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100))
+            {
+                return true;
+            }
+        }
+    }
+    for (int i = X+100, t = Y+100; i <= 700 && t <= 700; i = i + 100, t = t + 100)
+    {
+        if (positions[t / 100][i / 100] == (k^3))
+            break;
+        else if (positions[t / 100][i / 100] == 0)
+            continue;
+        else
+        {
+            if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100))
+            {
+                return true;
+            }
+        }
+    }
+    for (int i = X+100, t = Y-100; i <= 700 && t >=0; i = i + 100, t = t - 100)
+    {
+        if (positions[t / 100][i / 100] == (k^3))
+            break;
+        else if (positions[t / 100][i / 100] == 0)
+            continue;
+        else
+        {
+            if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100))
+            {
+                return true;
+            }
+        }
+    }
+    for (int i = X-100, t = Y+100; i >=0 && t <= 700; i = i - 100, t = t + 100)
+    {
+        if (positions[t / 100][i / 100] == (k^3))
+            break;
+        else if (positions[t / 100][i / 100] == 0)
+            continue;
+        else
+        {
+            if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100))
+            {
+                return true;
+            }
+        }
+    }
+    if (positions[Y/100][X/100]==1)
+    {
+    for(int i=8;i<=15;i++)
+       {
+           if(((X-100)==pieces[i].x && (Y+100)==pieces[i].y) || ((X+100)==pieces[i].x && (Y+100)==pieces[i].y))
+            {
+                return true;
+            }
+       }
+    }
+    if (positions[Y/100][X/100]==2)
+    {
+        for(int i=24;i<=31;i++)
+       {
+           if(((X-100)==pieces[i].x && (Y-100)==pieces[i].y) || ((X+100)==pieces[i].x && (Y-100)==pieces[i].y))
+            {
+                return true;
+            }
+       }
+    }
+    return false;
 }
