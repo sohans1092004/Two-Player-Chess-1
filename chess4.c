@@ -325,43 +325,7 @@ int checkmove(int i, int x, int y)
     {
         if (pieces[i].x <= (x + 100) && pieces[i].x >= (x - 100) && (pieces[i].y <= y + 100) && pieces[i].y >= y - 100)
         {
-            if ((pieces[i].x == x || pieces[i].y == y) && (positions[y / 100][x / 100] != 2))
-            {
-                int path = 1;
-                if (y < pieces[i].y)
-                {
-                    for (int j = (pieces[i].y / 100) - 1; j > (y / 100); j--)
-                    {
-                        if (positions[j][x / 100] != 0)
-                            path = 0;
-                    }
-                }
-                if (y > pieces[i].y)
-                {
-                    for (int j = (pieces[i].y / 100) + 1; j < (y / 100); j++)
-                    {
-                        if (positions[j][x / 100] != 0)
-                            path = 0;
-                    }
-                }
-                if (x > pieces[i].x)
-                {
-                    for (int j = (pieces[i].x / 100) + 1; j < (x / 100); j++)
-                    {
-                        if (positions[y / 100][j] != 0)
-                            path = 0;
-                    }
-                }
-                if (x < pieces[i].x)
-                {
-                    for (int j = (pieces[i].x / 100) - 1; j > (x / 100); j--)
-                    {
-                        if (positions[y / 100][j] != 0)
-                            path = 0;
-                    }
-                }
-                return path;
-            }
+            return 1;
         }
     }
     else if (i >= 8 && i < 16)
