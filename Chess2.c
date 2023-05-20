@@ -43,493 +43,604 @@ int main(void)
     const int screenHeight = 800;
     InitWindow(screenWidth, screenHeight, "CHESS");
     SetTargetFPS(60);
-    Texture2D wbishop1 = LoadTexture("White_Bishop.png");
-    Texture2D wbishop2 = LoadTexture("White_Bishop.png");
-    Texture2D wknight1 = LoadTexture("White_Knight.png");
-    Texture2D wknight2 = LoadTexture("White_Knight.png");
-    Texture2D wrook1 = LoadTexture("White_Rook.png");
-    Texture2D wrook2 = LoadTexture("White_Rook.png");
+    Texture2D wbishop = LoadTexture("White_Bishop.png");
+    Texture2D wknight = LoadTexture("White_Knight.png");
+    Texture2D wrook = LoadTexture("White_Rook.png");
     Texture2D wking = LoadTexture("White_King.png");
     Texture2D wqueen = LoadTexture("White_Queen.png");
-    Texture2D bbishop1 = LoadTexture("Black_Bishop.png");
-    Texture2D bbishop2 = LoadTexture("Black_Bishop.png");
-    Texture2D bknight1 = LoadTexture("Black_Knight.png");
-    Texture2D bknight2 = LoadTexture("Black_Knight.png");
-    Texture2D brook1 = LoadTexture("Black_Rook.png");
-    Texture2D brook2 = LoadTexture("Black_Rook.png");
-    Texture2D bking = LoadTexture("Black_King.png");
-    Texture2D bqueen = LoadTexture("Black_Queen.png");
-    Texture2D bpawn1 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn2 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn3 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn5 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn6 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn7 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn8 = LoadTexture("Black_Pawn.png");
-    Texture2D bpawn4 = LoadTexture("Black_Pawn.png");
-    Texture2D wpawn1 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn2 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn3 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn4 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn5 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn6 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn7 = LoadTexture("White_Pawn.png");
-    Texture2D wpawn8 = LoadTexture("White_Pawn.png");
-    Rectangle CurrRec = {100, 100, 100, 100};
-    int piecesel = 0;
-    Vector2 w[] = {{0, 700},{100, 700},{200, 700},{300, 700},{400, 700},{500, 700},{600, 700},{700, 700},
+    Texture2D bbishop = LoadTexture("Black/Black_Bishop.png");
+    Texture2D bknight = LoadTexture("Black/Black_Knight.png");
+    Texture2D brook = LoadTexture("Black/Black_Rook.png");
+    Texture2D bking = LoadTexture("Black/Black_King.png");
+    Texture2D bqueen = LoadTexture("Black/Black_Queen.png");
+    Texture2D bpawn = LoadTexture("Black/Black_Pawn.png");
+    Texture2D wpawn = LoadTexture("White_Pawn.png");
+    Rectangle CurrRec = {400, 700, 100, 100};
+    int piecesel = -2;
+    Vector2 pieces[] = {{0, 700},{100, 700},{200, 700},{300, 700},{400, 700},{500, 700},{600, 700},{700, 700},
     {0, 600},{100, 600},{200, 600},{300, 600},{400, 600},{500, 600},{600, 600},{700, 600},
     {0, 0},{100, 0},{200, 0},{300, 0},{400, 0},{500, 0},{600, 0},{700, 0},
     {0, 100},{100, 100},{200, 100},{300, 100},{400, 100},{500, 100},{600, 100},{700, 100}};
-    int positions[8][8] = {{2,2,2,2,2,2,2,2},{2,2,2,2,2,2,2,2},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1}};
+    int positions[8][8] = {{1,1,1,1,1,1,1,1},{1,1,1,1,1,1,1,1},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{0,0,0,0,0,0,0,0},{2,2,2,2,2,2,2,2},{2,2,2,2,2,2,2,2}};
+    //1 -> black  2->white
     while (!WindowShouldClose())
     {
         if (IsMouseButtonPressed(0))
         {
-            if (!piecesel)
+            if (piecesel <=0)
             {
                 CurrRec.x = (GetMouseX() / 100) * 100;
                 CurrRec.y = (GetMouseY() / 100) * 100;
+                if(positions[GetMouseY()/100][GetMouseX()/100] == 1 && piecesel == -2)
                 piecesel = 1;
+                if(positions[GetMouseY()/100][GetMouseX()/100] == 2 && piecesel == -1)
+                piecesel = 2;
             }
             else
             {
+                piecesel=-1;
                 int x = (GetMouseX() / 100) * 100;int y = (GetMouseY() / 100) * 100;
-                if (CurrRec.x == w[0].x && CurrRec.y == w[0].y)
+                if (CurrRec.x == pieces[0].x && CurrRec.y == pieces[0].y)
                 {
-                    if ((w[0].x ==  x|| w[0].y == y) && (positions[y/100][x/100]!=1))
+                    if ((pieces[0].x ==  x|| pieces[0].y == y) && (positions[y/100][x/100]!=2))
                     {
                         int path=1;
-                        if(y<w[0].y){
-                            for(int i=(w[0].y/100)-1;i>(y/100);i--){
+                        if(y<pieces[0].y){
+                            for(int i=(pieces[0].y/100)-1;i>(y/100);i--){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(y>w[0].y){
-                            for(int i=(w[0].y/100)+1;i<(y/100);i++){
+                        if(y>pieces[0].y){
+                            for(int i=(pieces[0].y/100)+1;i<(y/100);i++){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(x>w[0].x){
-                            for(int i=(w[0].x/100)+1;i<(x/100);i++){
+                        if(x>pieces[0].x){
+                            for(int i=(pieces[0].x/100)+1;i<(x/100);i++){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
-                        if(x<w[0].x){
-                            for(int i=(w[0].x/100)-1;i>(x/100);i--){
+                        if(x<pieces[0].x){
+                            for(int i=(pieces[0].x/100)-1;i>(x/100);i--){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
                         if(path){
                         for(int i=16;i<32;i++)
                         {
-                            if(x==w[i].x && y==w[i].y)
+                            if(x==pieces[i].x && y==pieces[i].y)
                             {
-                                w[i].x=800;w[i].y=800;
-                                
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                        w[0].x = (GetMouseX() / 100) * 100;
-                        w[0].y = (GetMouseY() / 100) * 100;  
-                        positions[y/100][x/100] = 2;
+                        pieces[0].x = (GetMouseX() / 100) * 100;
+                        pieces[0].y = (GetMouseY() / 100) * 100;  
+                        positions[y/100][x/100] = 1;
+                        piecesel = -2;
                         }
                     }
                 }
-                if (CurrRec.x == w[7].x && CurrRec.y == w[7].y)
+                if (CurrRec.x == pieces[7].x && CurrRec.y == pieces[7].y)
                 {
-                    if (w[7].x == x || w[7].y == y)
+                    if (pieces[7].x == x || pieces[7].y == y)
                     {
                         int path=1;
-                        if(y<w[7].y){
-                            for(int i=(w[7].y/100)-1;i>(y/100);i--){
+                        if(y<pieces[7].y){
+                            for(int i=(pieces[7].y/100)-1;i>(y/100);i--){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(y>w[7].y){
-                            for(int i=(w[7].y/100)+1;i<(y/100);i++){
+                        if(y>pieces[7].y){
+                            for(int i=(pieces[7].y/100)+1;i<(y/100);i++){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(x>w[7].x){
-                            for(int i=(w[7].x/100)+1;i<(x/100);i++){
+                        if(x>pieces[7].x){
+                            for(int i=(pieces[7].x/100)+1;i<(x/100);i++){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
-                        if(x<w[7].x){
-                            for(int i=(w[7].x/100)-1;i>(x/100);i--){
+                        if(x<pieces[7].x){
+                            for(int i=(pieces[7].x/100)-1;i>(x/100);i--){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
                         if(path){
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         } 
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                        w[7].x = (GetMouseX() / 100) * 100;
-                        w[7].y = (GetMouseY() / 100) * 100;
-                        positions[y/100][x/100] = 2;
+                        pieces[7].x = (GetMouseX() / 100) * 100;
+                        pieces[7].y = (GetMouseY() / 100) * 100;
+                        positions[y/100][x/100] = 1;
+                                piecesel = -2;
                         }
                     }
                 }
-                if (CurrRec.x == w[1].x && CurrRec.y == w[1].y)
+                if (CurrRec.x == pieces[1].x && CurrRec.y == pieces[1].y)
                 {
 
-                    if ((w[1].x != (GetMouseX() / 100) * 100) && (w[1].y != (GetMouseY() / 100) * 100) && abs(w[1].x - (GetMouseX() / 100) * 100) + abs(w[1].y - (GetMouseY() / 100) * 100) == 300)
+                    if ((pieces[1].x != (GetMouseX() / 100) * 100) && (pieces[1].y != (GetMouseY() / 100) * 100) && abs(pieces[1].x - (GetMouseX() / 100) * 100) + abs(pieces[1].y - (GetMouseY() / 100) * 100) == 300)
                     {
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }
                          positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                         w[1].x = (GetMouseX() / 100) * 100;
-                         w[1].y = (GetMouseY() / 100) * 100;    
-                            positions[y/100][x/100] = 2;
+                         pieces[1].x = (GetMouseX() / 100) * 100;
+                         pieces[1].y = (GetMouseY() / 100) * 100;    
+                            positions[y/100][x/100] = 1;
+                                piecesel = -2;
                     }
                 }
-                if (CurrRec.x == w[6].x && CurrRec.y == w[6].y)
+                if (CurrRec.x == pieces[6].x && CurrRec.y == pieces[6].y)
                 {
 
-                    if ((w[6].x != (GetMouseX() / 100) * 100) && (w[6].y != (GetMouseY() / 100) * 100) && abs(w[6].x - (GetMouseX() / 100) * 100) + abs(w[6].y - (GetMouseY() / 100) * 100) == 300)
+                    if ((pieces[6].x != (GetMouseX() / 100) * 100) && (pieces[6].y != (GetMouseY() / 100) * 100) && abs(pieces[6].x - (GetMouseX() / 100) * 100) + abs(pieces[6].y - (GetMouseY() / 100) * 100) == 300)
                     {
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }      
                                 positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[6].x = (GetMouseX() / 100) * 100;
-                                w[6].y = (GetMouseY() / 100) * 100;  
-                                    positions[y/100][x/100] = 2;
+                                pieces[6].x = (GetMouseX() / 100) * 100;
+                                pieces[6].y = (GetMouseY() / 100) * 100;  
+                                    positions[y/100][x/100] = 1;
+                                piecesel = -2;
                     }
                 }
-                if (CurrRec.x == w[5].x && CurrRec.y == w[5].y)
+                if (CurrRec.x == pieces[5].x && CurrRec.y == pieces[5].y)
                 {
-                    if (abs(w[5].x - (GetMouseX() / 100) * 100) == abs(w[5].y - (GetMouseY() / 100) * 100))
+                    if (abs(pieces[5].x - (GetMouseX() / 100) * 100) == abs(pieces[5].y - (GetMouseY() / 100) * 100))
                     {
+                        int path=1;
+                        Vector2 check;
+                        int i,j;
+                        if((GetMouseX()/100) * 100-pieces[5].x>0)
+                        {check.x=pieces[5].x+100;i=100;}
+                        if((GetMouseX()/100) * 100-pieces[5].x<0)
+                        {check.x=pieces[5].x-100;i=-100;}
+                        if((GetMouseY()/100) * 100-pieces[5].y>0)
+                        {check.y=pieces[5].y+100;j=100;}
+                        if((GetMouseY()/100) * 100-pieces[5].y<0)
+                        {check.y=pieces[5].y-100;j=-100;}
+                        while(abs(check.x-pieces[5].x)<=abs(pieces[5].x-(GetMouseX() / 100) * 100) && abs(check.y-pieces[5].y)<=abs(pieces[5].y-(GetMouseY() / 100) * 100) )
+                        {
+                           if(positions[(int)check.y/100][(int)check.x/100]!=0)
+                           {
+                               path=0;break;
+                           }     
+                           else
+                           {  
+                            check.x=check.x+i;
+                            check.y=check.y+j;
+                           }       
+                        }
+                        if(path)
+                        {
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }   
                                 positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[5].x = (GetMouseX() / 100) * 100;
-                                w[5].y = (GetMouseY() / 100) * 100;   
-                                    positions[y/100][x/100] = 2;
+                                pieces[5].x = (GetMouseX() / 100) * 100;
+                                pieces[5].y = (GetMouseY() / 100) * 100;   
+                                    positions[y/100][x/100] = 1;
+                                piecesel = -2;
+                        }
                     }
                 }
-                if (CurrRec.x == w[2].x && CurrRec.y == w[2].y)
+                if (CurrRec.x == pieces[2].x && CurrRec.y == pieces[2].y)
                 {
-                    if (abs(w[2].x - (GetMouseX() / 100) * 100) == abs(w[2].y - (GetMouseY() / 100) * 100))
+                    if (abs(pieces[2].x - (GetMouseX() / 100) * 100) == abs(pieces[2].y - (GetMouseY() / 100) * 100))
                     {
+                        int path=1;
+                        int i,j;
+                        Vector2 check;
+                        if((GetMouseX()/100) * 100-pieces[2].x>0)
+                        {check.x=pieces[2].x+100;i=100;}
+                        if((GetMouseX()/100) * 100-pieces[2].x<0)
+                        {check.x=pieces[2].x-100;i=-100;}
+                        if((GetMouseY()/100) * 100-pieces[2].y>0)
+                        {check.y=pieces[2].y+100;j=100;}
+                        if((GetMouseY()/100) * 100-pieces[2].y<0)
+                        {check.y=pieces[2].y-100;j=-100;}
+                        while(abs(check.x-pieces[2].x)<=abs(pieces[2].x-(GetMouseX() / 100) * 100) && abs(check.y-pieces[2].y)<=abs(pieces[2].y-(GetMouseY() / 100) * 100) )
+                        {
+                           if(positions[(int)check.y/100][(int)check.x/100]!=0)
+                           {
+                               path=0;break;
+                           }     
+                           else
+                           {  
+                            check.x=check.x+i;
+                            check.y=check.y+j;
+                           }       
+                        }
+                        if(path)
+                        {
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
+                                positions[y/100][x/100] = 2;
                                 break;
                             }
                         } 
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[2].x = (GetMouseX() / 100) * 100;
-                                w[2].y = (GetMouseY() / 100) * 100;
+                                pieces[2].x = (GetMouseX() / 100) * 100;
+                                pieces[2].y = (GetMouseY() / 100) * 100;
                                     positions[y/100][x/100] = 2;
+                                    piecesel=-2;
+                        }
                     }
                 }
-                if (CurrRec.x == w[4].x && CurrRec.y == w[4].y)
+                if (CurrRec.x == pieces[4].x && CurrRec.y == pieces[4].y)
                 {
 
-                    if ((w[4].x <= (GetMouseX() / 100) * 100 + 100) && w[4].x >= (GetMouseX() / 100) * 100 - 100 && (w[4].y <= (GetMouseY() / 100) * 100 + 100) && w[4].y >= (GetMouseY() / 100) * 100 - 100)
+                    if ((pieces[4].x <= (GetMouseX() / 100) * 100 + 100) && pieces[4].x >= (GetMouseX() / 100) * 100 - 100 && (pieces[4].y <= (GetMouseY() / 100) * 100 + 100) && pieces[4].y >= (GetMouseY() / 100) * 100 - 100)
                     {
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                break;
                             }
                         }  
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[4].x = (GetMouseX() / 100) * 100;
-                                w[4].y = (GetMouseY() / 100) * 100;  
+                                pieces[4].x = (GetMouseX() / 100) * 100;
+                                pieces[4].y = (GetMouseY() / 100) * 100;  
                                     positions[y/100][x/100] = 2;
+                                piecesel = -2;
                     }
                 }
-                if(CurrRec.x==w[3].x && CurrRec.y== w[3].y){
-                    if(w[3].x==(GetMouseX()/100)*100 ||w[3].y==(GetMouseY()/100)*100 || abs(w[3].x-(GetMouseX()/100)*100)==abs(w[3].y-(GetMouseY()/100)*100)){
+                if(CurrRec.x==pieces[3].x && CurrRec.y== pieces[3].y){
+                    if(pieces[3].x==(GetMouseX()/100)*100 ||pieces[3].y==(GetMouseY()/100)*100 || abs(pieces[3].x-(GetMouseX()/100)*100)==abs(pieces[3].y-(GetMouseY()/100)*100)){
                         for(int i=16;i<32;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                break;
                             }
                         }  
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[3].x = (GetMouseX() / 100) * 100;
-                                w[3].y = (GetMouseY() / 100) * 100;
+                                pieces[3].x = (GetMouseX() / 100) * 100;
+                                pieces[3].y = (GetMouseY() / 100) * 100;
                                     positions[y/100][x/100] = 2;
+                                piecesel = -2;
                     }
                 }
-                if (CurrRec.x == w[16].x && CurrRec.y == w[16].y)
+                if (CurrRec.x == pieces[16].x && CurrRec.y == pieces[16].y)
                 {
-                    if (w[16].x == (GetMouseX() / 100) * 100 || w[16].y == (GetMouseY() / 100) * 100)
+                    if (pieces[16].x == (GetMouseX() / 100) * 100 || pieces[16].y == (GetMouseY() / 100) * 100)
                     {
                         int path=1;
-                        if(y<w[16].y){
-                            for(int i=(w[16].y/100)-1;i>(y/100);i--){
+                        if(y<pieces[16].y){
+                            for(int i=(pieces[16].y/100)-1;i>(y/100);i--){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(y>w[16].y){
-                            for(int i=(w[16].y/100)+1;i<(y/100);i++){
+                        if(y>pieces[16].y){
+                            for(int i=(pieces[16].y/100)+1;i<(y/100);i++){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(x>w[16].x){
-                            for(int i=(w[16].x/100)+1;i<(x/100);i++){
+                        if(x>pieces[16].x){
+                            for(int i=(pieces[16].x/100)+1;i<(x/100);i++){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
-                        if(x<w[16].x){
-                            for(int i=(w[16].x/100)-1;i>(x/100);i--){
+                        if(x<pieces[16].x){
+                            for(int i=(pieces[16].x/100)-1;i>(x/100);i--){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
                         if(path){
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                        w[16].x = (GetMouseX() / 100) * 100;
-                        w[16].y = (GetMouseY() / 100) * 100; 
+                        pieces[16].x = (GetMouseX() / 100) * 100;
+                        pieces[16].y = (GetMouseY() / 100) * 100; 
                         positions[y/100][x/100] = 1;
+                                piecesel = -1;
                         }
                     }
                 }
-                if (CurrRec.x == w[23].x && CurrRec.y == w[23].y)
+                if (CurrRec.x == pieces[23].x && CurrRec.y == pieces[23].y)
                 {
-                    if (w[23].x == (GetMouseX() / 100) * 100 || w[23].y == (GetMouseY() / 100) * 100)
+                    if (pieces[23].x == (GetMouseX() / 100) * 100 || pieces[23].y == (GetMouseY() / 100) * 100)
                     {
                         int path=1;
-                        if(y<w[23].y){
-                            for(int i=(w[23].y/100)-1;i>(y/100);i--){
+                        if(y<pieces[23].y){
+                            for(int i=(pieces[23].y/100)-1;i>(y/100);i--){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(y>w[23].y){
-                            for(int i=(w[23].y/100)+1;i<(y/100);i++){
+                        if(y>pieces[23].y){
+                            for(int i=(pieces[23].y/100)+1;i<(y/100);i++){
                                 if(positions[i][x/100] != 0) path=0;
                             }
                         }
-                        if(x>w[23].x){
-                            for(int i=(w[23].x/100)+1;i<(x/100);i++){
+                        if(x>pieces[23].x){
+                            for(int i=(pieces[23].x/100)+1;i<(x/100);i++){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
-                        if(x<w[23].x){
-                            for(int i=(w[23].x/100)-1;i>(x/100);i--){
+                        if(x<pieces[23].x){
+                            for(int i=(pieces[23].x/100)-1;i>(x/100);i--){
                                 if(positions[y/100][i] !=0) path=0;
                             }
                         }
                         if(path){
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }    
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                        w[23].x = (GetMouseX() / 100) * 100;
-                        w[23].y = (GetMouseY() / 100) * 100;
+                        pieces[23].x = (GetMouseX() / 100) * 100;
+                        pieces[23].y = (GetMouseY() / 100) * 100;
                         positions[y/100][x/100] = 1;
+                                piecesel = -1;
                         }
                     }
                 }
-                if (CurrRec.x == w[17].x && CurrRec.y == w[17].y)
+                if (CurrRec.x == pieces[17].x && CurrRec.y == pieces[17].y)
                 {
 
-                    if ((w[17].x != (GetMouseX() / 100) * 100) && (w[17].y != (GetMouseY() / 100) * 100) && abs(w[17].x - (GetMouseX() / 100) * 100) + abs(w[17].y - (GetMouseY() / 100) * 100) == 300)
+                    if ((pieces[17].x != (GetMouseX() / 100) * 100) && (pieces[17].y != (GetMouseY() / 100) * 100) && abs(pieces[17].x - (GetMouseX() / 100) * 100) + abs(pieces[17].y - (GetMouseY() / 100) * 100) == 300)
                     {
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         } 
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                         w[17].x = (GetMouseX() / 100) * 100;
-                         w[17].y = (GetMouseY() / 100) * 100; 
+                         pieces[17].x = (GetMouseX() / 100) * 100;
+                         pieces[17].y = (GetMouseY() / 100) * 100; 
                             positions[y/100][x/100] = 1;
+                                piecesel = -1;
                     }
                 }
-                if (CurrRec.x == w[22].x && CurrRec.y == w[22].y)
+                if (CurrRec.x == pieces[22].x && CurrRec.y == pieces[22].y)
                 {
 
-                    if ((w[22].x != x) && (w[22].y != y) && abs(w[22].x - x) + abs(w[22].y - y) == 300)
+                    if ((pieces[22].x != x) && (pieces[22].y != y) && abs(pieces[22].x - x) + abs(pieces[22].y - y) == 300)
                     {
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }      
                                 positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[22].x = (GetMouseX() / 100) * 100;
-                                w[22].y = (GetMouseY() / 100) * 100; 
+                                pieces[22].x = (GetMouseX() / 100) * 100;
+                                pieces[22].y = (GetMouseY() / 100) * 100; 
                                 positions[y/100][x/100] = 1;
+                                piecesel = -1;
                     }
                 }
-                if (CurrRec.x == w[21].x && CurrRec.y == w[21].y)
+                if (CurrRec.x == pieces[21].x && CurrRec.y == pieces[21].y)
                 {
-                    if (abs(w[21].x - (GetMouseX() / 100) * 100) == abs(w[21].y - (GetMouseY() / 100) * 100))
+                    if (abs(pieces[21].x - (GetMouseX() / 100) * 100) == abs(pieces[21].y - (GetMouseY() / 100) * 100))
                     {
+                        int path=1;
+                        Vector2 check;
+                        int i,j;
+                        if((GetMouseX()/100) * 100-pieces[21].x>0)
+                        {check.x=pieces[21].x+100;i=100;}
+                        if((GetMouseX()/100) * 100-pieces[21].x<0)
+                        {check.x=pieces[21].x-100;i=-100;}
+                        if((GetMouseY()/100) * 100-pieces[21].y>0)
+                        {check.y=pieces[21].y+100;j=100;}
+                        if((GetMouseY()/100) * 100-pieces[21].y<0)
+                        {check.y=pieces[21].y-100;j=-100;}
+                        while(abs(check.x-pieces[21].x)<=abs(pieces[21].x-(GetMouseX() / 100) * 100) && abs(check.y-pieces[21].y)<=abs(pieces[21].y-(GetMouseY() / 100) * 100) )
+                        {
+                           if(positions[(int)check.y/100][(int)check.x/100]!=0)
+                           {
+                               path=0;break;
+                           }     
+                           else
+                           {  
+                            check.x=check.x+i;
+                            check.y=check.y+j;
+                           }       
+                        }
+                        if(path)
+                        {
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         }   
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[21].x = (GetMouseX() / 100) * 100;
-                                w[21].y = (GetMouseY() / 100) * 100; 
+                                pieces[21].x = (GetMouseX() / 100) * 100;
+                                pieces[21].y = (GetMouseY() / 100) * 100; 
                                     positions[y/100][x/100] = 1;
+                                piecesel = -1;
+                        }
                     }
                 }
-                if (CurrRec.x == w[18].x && CurrRec.y == w[18].y)
+                if (CurrRec.x == pieces[18].x && CurrRec.y == pieces[18].y)
                 {
-                    if (abs(w[18].x - (GetMouseX() / 100) * 100) == abs(w[18].y - (GetMouseY() / 100) * 100))
+                    if (abs(pieces[18].x - (GetMouseX() / 100) * 100) == abs(pieces[18].y - (GetMouseY() / 100) * 100))
                     {
+                        int path=1;
+                        Vector2 check;
+                        int i,j;
+                        if((GetMouseX()/100) * 100-pieces[18].x>0)
+                        {check.x=pieces[18].x+100;i=100;}
+                        if((GetMouseX()/100) * 100-pieces[18].x<0)
+                        {check.x=pieces[18].x-100;i=-100;}
+                        if((GetMouseY()/100) * 100-pieces[18].y>0)
+                        {check.y=pieces[18].y+100;j=100;}
+                        if((GetMouseY()/100) * 100-pieces[18].y<0)
+                        {check.y=pieces[18].y-100;j=-100;}
+                        while(abs(check.x-pieces[18].x)<=abs(pieces[18].x-(GetMouseX() / 100) * 100) && abs(check.y-pieces[18].y)<=abs(pieces[18].y-(GetMouseY() / 100) * 100) )
+                        {
+                           if(positions[(int)check.y/100][(int)check.x/100]!=0)
+                           {
+                               path=0;break;
+                           }     
+                           else
+                           {  
+                            check.x=check.x+i;
+                            check.y=check.y+j;
+                           }       
+                        }
+                        if(path)
+                        {
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                 break;
                             }
                         } 
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[18].x = (GetMouseX() / 100) * 100;
-                                w[18].y = (GetMouseY() / 100) * 100;  
+                                pieces[18].x = (GetMouseX() / 100) * 100;
+                                pieces[18].y = (GetMouseY() / 100) * 100;  
                                     positions[y/100][x/100] = 1;
+                                piecesel = -1;
+                        }
                     }
                 }
-                if (CurrRec.x == w[20].x && CurrRec.y == w[20].y)
+                    
+                if (CurrRec.x == pieces[20].x && CurrRec.y == pieces[20].y)
                 {
 
-                    if ((w[20].x <= (GetMouseX() / 100) * 100 + 100) && w[20].x >= (GetMouseX() / 100) * 100 - 100 && (w[20].y <= (GetMouseY() / 100) * 100 + 100) && w[20].y >= (GetMouseY() / 100) * 100 - 100)
+                    if ((pieces[20].x <= (GetMouseX() / 100) * 100 + 100) && pieces[20].x >= (GetMouseX() / 100) * 100 - 100 && (pieces[20].y <= (GetMouseY() / 100) * 100 + 100) && pieces[20].y >= (GetMouseY() / 100) * 100 - 100)
                     {
                         for(int i=0;i<16;i++)
                         {
-                            if(((GetMouseX() /100)*100==w[i].x && (GetMouseY() /100)*100==w[i].y))
+                            if(((GetMouseX() /100)*100==pieces[i].x && (GetMouseY() /100)*100==pieces[i].y))
                             {
-                                w[i].x=800;w[i].y=800;
+                                pieces[i].x=800;pieces[i].y=800;
                                break;
                             }
                         }  
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[20].x = (GetMouseX() / 100) * 100;
-                                w[20].y = (GetMouseY() / 100) * 100;    
+                                pieces[20].x = (GetMouseX() / 100) * 100;
+                                pieces[20].y = (GetMouseY() / 100) * 100;    
                                     positions[y/100][x/100] = 1;
+                                piecesel = -1;
                     }
                 }
-                if(CurrRec.x==w[19].x && CurrRec.y== w[19].y){
-                    if(w[19].x==(GetMouseX()/100)*100 ||w[19].y==(GetMouseY()/100)*100 || abs(w[19].x-(GetMouseX()/100)*100)==abs(w[19].y-(GetMouseY()/100)*100)){
+                if(CurrRec.x==pieces[19].x && CurrRec.y== pieces[19].y){
+                    if(pieces[19].x==(GetMouseX()/100)*100 ||pieces[19].y==(GetMouseY()/100)*100 || abs(pieces[19].x-(GetMouseX()/100)*100)==abs(pieces[19].y-(GetMouseY()/100)*100)){
                         for(int i=0;i<16;i++){
-                            if(x==w[i].x && y==w[i].y){
-                                w[i].x=800;w[i].y=800;
+                            if(x==pieces[i].x && y==pieces[i].y){
+                                pieces[i].x=800;pieces[i].y=800;
                                break;
                             }
                         }  
                         positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[19].x = (GetMouseX() / 100) * 100;
-                                w[19].y = (GetMouseY() / 100) * 100;
-                                    positions[y/100][x/100] = 1;
+                                pieces[19].x = (GetMouseX() / 100) * 100;
+                                pieces[19].y = (GetMouseY() / 100) * 100;
+                                    positions[y/100][x/100] = 1;   
+                                piecesel = -1;
                     }
                 }
                 for(int j=8;j<16;j++){
-                    if(CurrRec.x==w[j].x && CurrRec.y==w[j].y){
-                        if(w[j].x==x && w[j].y == y+100 && positions[y/100][x/100] == 0){ 
+                    if(CurrRec.x==pieces[j].x && CurrRec.y==pieces[j].y){
+                        if(pieces[j].x==x && pieces[j].y == y+100 && positions[y/100][x/100] == 0){ 
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[j].x = (GetMouseX() / 100) * 100;
-                                w[j].y = (GetMouseY() / 100) * 100;
+                                pieces[j].x = (GetMouseX() / 100) * 100;
+                                pieces[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 2;
+                                piecesel = -2;
                         }
-                        else if(w[j].x == x && w[j].y == 600 && y ==400 && positions[y/100][x/100] == 0 && positions[(y-100)/100][x/100] == 0){ 
+                        else if(pieces[j].x == x && pieces[j].y == 600 && y ==400 && positions[y/100][x/100] == 0 && positions[(y+100)/100][x/100] == 0){ 
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[j].x = (GetMouseX() / 100) * 100;
-                                w[j].y = (GetMouseY() / 100) * 100;
+                                pieces[j].x = (GetMouseX() / 100) * 100;
+                                pieces[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 2;
+                                piecesel = -2;
                         }
-                        else if(w[j].y == y+100 && abs(w[j].x - x) == 100 && positions[y/100][x/100]==1){
+                        else if(pieces[j].y == y+100 && abs(pieces[j].x - x) == 100 && positions[y/100][x/100]==1){
                             for(int i=16;i<32;i++){
-                                if(x==w[i].x && y==w[i].y){
-                                    w[i].x=800;w[i].y=800;
+                                if(x==pieces[i].x && y==pieces[i].y){
+                                    pieces[i].x=800;pieces[i].y=800;
                                     break;
                                 }
                             }  
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[j].x = (GetMouseX() / 100) * 100;
-                                w[j].y = (GetMouseY() / 100) * 100;
+                                pieces[j].x = (GetMouseX() / 100) * 100;
+                                pieces[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 2;
+                                piecesel = -2;
                         }
                     }
                 }
-                piecesel = 0;
                 for(int j=24;j<32;j++){
-                    if(CurrRec.x==w[j].x && CurrRec.y==w[j].y){
-                        if(w[j].x==x && w[j].y == y-100 && positions[y/100][x/100] == 0){ 
+                    if(CurrRec.x==pieces[j].x && CurrRec.y==pieces[j].y){
+                        if(pieces[j].x==x && pieces[j].y == y-100 && positions[y/100][x/100] == 0){ 
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[j].x = (GetMouseX() / 100) * 100;
-                                w[j].y = (GetMouseY() / 100) * 100;
+                                pieces[j].x = (GetMouseX() / 100) * 100;
+                                pieces[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 1;
+                                piecesel = -1;
                         }
-                        else if(w[j].x == x && w[j].y == 100 && y ==300 && positions[y/100][x/100] == 0 && positions[(y+100)/100][x/100] == 0){ 
+                        else if(pieces[j].x == x && pieces[j].y == 100 && y ==300 && positions[y/100][x/100] == 0 && positions[(y-100)/100][x/100] == 0){ 
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[j].x = (GetMouseX() / 100) * 100;
-                                w[j].y = (GetMouseY() / 100) * 100;
+                                pieces[j].x = (GetMouseX() / 100) * 100;
+                                pieces[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 1;
+                                piecesel = -1;
                         }
-                        else if(w[j].y == y-100 && abs(w[j].x - x) == 100 && positions[y/100][x/100]==2){
+                        else if(pieces[j].y == y-100 && abs(pieces[j].x - x) == 100 && positions[y/100][x/100]==2){
                             for(int i=0;i<16;i++){
-                                if(x==w[i].x && y==w[i].y){
-                                    w[i].x=800;w[i].y=800;
+                                if(x==pieces[i].x && y==pieces[i].y){
+                                    pieces[i].x=800;pieces[i].y=800;
                                     break;
                                 }
                             }  
                             positions[(int)CurrRec.y/100][(int)CurrRec.x/100] = 0;
-                                w[j].x = (GetMouseX() / 100) * 100;
-                                w[j].y = (GetMouseY() / 100) * 100;
+                                pieces[j].x = (GetMouseX() / 100) * 100;
+                                pieces[j].y = (GetMouseY() / 100) * 100;
                                 positions[y/100][x/100] = 1;
+                                piecesel = -1;
                         }
                     }
                 }
@@ -537,38 +648,38 @@ int main(void)
         }
         BeginDrawing();
         DrawBoard();
-        DrawTextureEx(wrook1, w[0], 0, 1.5, WHITE);
-        DrawTextureEx(wbishop1, w[2], 0, 1.5, WHITE);
-        DrawTextureEx(wknight1, w[1], 0, 1.5, WHITE);
-        DrawTextureEx(wrook2, w[7], 0, 1.5, WHITE);
-        DrawTextureEx(wbishop2, w[5], 0, 1.5, WHITE);
-        DrawTextureEx(wknight2, w[6], 0, 1.5, WHITE);
-        DrawTextureEx(wking, w[4], 0, 1.5, WHITE);
-        DrawTextureEx(wqueen, w[3], 0, 1.5, WHITE);
-        DrawTextureEx(brook1, w[16], 0, 1.5, WHITE);
-        DrawTextureEx(brook2, w[23], 0, 1.5, WHITE);
-        DrawTextureEx(bbishop1, w[18], 0, 1.5, WHITE);
-        DrawTextureEx(bknight1, w[17], 0, 1.5, WHITE);
-        DrawTextureEx(bknight2, w[22], 0, 1.5, WHITE);
-        DrawTextureEx(bbishop2, w[21], 0, 1.5, WHITE);
-        DrawTextureEx(bking, w[20], 0, 1.5, WHITE);
-        DrawTextureEx(bqueen, w[19], 0, 1.5, WHITE);
-        DrawTextureEx(wpawn2,w[9],0,1.5,WHITE);
-        DrawTextureEx(wpawn1,w[8],0,1.5,WHITE);
-        DrawTextureEx(wpawn3,w[10],0,1.5,WHITE);
-        DrawTextureEx(wpawn4,w[11],0,1.5,WHITE);
-        DrawTextureEx(wpawn5,w[12],0,1.5,WHITE);
-        DrawTextureEx(wpawn6,w[13],0,1.5,WHITE);
-        DrawTextureEx(wpawn7,w[14],0,1.5,WHITE);
-        DrawTextureEx(wpawn8,w[15],0,1.5,WHITE);
-        DrawTextureEx(bpawn1,w[24],0,1.5,WHITE);
-        DrawTextureEx(bpawn2,w[25],0,1.5,WHITE);
-        DrawTextureEx(bpawn3,w[26],0,1.5,WHITE);
-        DrawTextureEx(bpawn4,w[27],0,1.5,WHITE);
-        DrawTextureEx(bpawn5,w[28],0,1.5,WHITE);
-        DrawTextureEx(bpawn6,w[29],0,1.5,WHITE);
-        DrawTextureEx(bpawn7,w[30],0,1.5,WHITE);
-        DrawTextureEx(bpawn8,w[31],0,1.5,WHITE);
+        DrawTextureEx(wrook, pieces[0], 0, 1.5, WHITE);
+        DrawTextureEx(wbishop, pieces[2], 0, 1.5, WHITE);
+        DrawTextureEx(wknight, pieces[1], 0, 1.5, WHITE);
+        DrawTextureEx(wrook, pieces[7], 0, 1.5, WHITE);
+        DrawTextureEx(wbishop, pieces[5], 0, 1.5, WHITE);
+        DrawTextureEx(wknight, pieces[6], 0, 1.5, WHITE);
+        DrawTextureEx(wking, pieces[4], 0, 1.5, WHITE);
+        DrawTextureEx(wqueen, pieces[3], 0, 1.5, WHITE);
+        DrawTextureEx(brook, pieces[16], 0, 1.5, WHITE);
+        DrawTextureEx(brook, pieces[23], 0, 1.5, WHITE);
+        DrawTextureEx(bbishop, pieces[18], 0, 1.5, WHITE);
+        DrawTextureEx(bknight, pieces[17], 0, 1.5, WHITE);
+        DrawTextureEx(bknight, pieces[22], 0, 1.5, WHITE);
+        DrawTextureEx(bbishop, pieces[21], 0, 1.5, WHITE);
+        DrawTextureEx(bking, pieces[20], 0, 1.5, WHITE);
+        DrawTextureEx(bqueen, pieces[19], 0, 1.5, WHITE);
+        DrawTextureEx(wpawn,pieces[9],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[8],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[10],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[11],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[12],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[13],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[14],0,1.5,WHITE);
+        DrawTextureEx(wpawn,pieces[15],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[24],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[25],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[26],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[27],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[28],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[29],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[30],0,1.5,WHITE);
+        DrawTextureEx(bpawn,pieces[31],0,1.5,WHITE);
         
         DrawRectangleLinesEx(CurrRec, 5, BLUE);
         EndDrawing();
