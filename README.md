@@ -2,6 +2,9 @@
 
 Two Player Chess aims to create a two-player chess game using C programming  language by raylib library. This README file provides an overview of the project, instructions for running the game, and additional information for contributors.
 
+![image](https://github.com/sohans1092004/Two-Player-Chess-1/assets/63198162/53b65252-7232-4eb9-8bec-426cf7df0a74)
+
+
 # Features
 
 
@@ -26,13 +29,19 @@ The Two Player Chess project includes the following features:
 
 7. Console Interface: The game provides a user-friendly console interface for players to input their moves and view the game state.
 
+8. Castle: Players can castle the king to king/queen side.
+
+9. Pawn Promotion: Players get a queen when one of his pawn reaches the other side of the chess board.
+
+10. Sound Effects: Elevating the interactive experience to new heights, the capstone project introduces captivating sound effects that accompany each strategic move of the chess pieces.
+
 # Prerequisites 
 
 To run the Two Player Chess game, you need to have the following installed on your system:
 
 • C/GCC Compiler: The game is built using C programming language. It is suggested to use VSCode and after installing the compiler, we need to set its path to environment path variables because it allows the C program to compile from any directory on your computer.
 
-• Raylib: raylib is a simple and easy-to-use library to enjoy videogames programming. You can download raylib from the link https://github.com/raysan5/raylib/releases/latest
+• Raylib: raylib is a simple and easy-to-use library to enjoy videogames programming. You can download raylib from the link https://github.com/raysan5/raylib/releases/latest. You can download raylib library from the website https://www.raylib.com/. Notepad++ comes with the downloaded raylib library in which you can get started with two-player-chess.
 
 # Getting Started 
 Follow the steps below to get started with the Two Player Chess:
