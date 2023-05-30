@@ -58,7 +58,7 @@ Follow the steps below to get started with the Two Player Chess:
 
 # Acknowledgement
 
-• Two-Player-Chess was developed as a capstone project for Course (CS1L001, Introduction to Programming and Data Structures), IIT Bhubaneshwar
+• Two-Player-Chess was developed as a capstone project for Course (CS1P001, Introduction to Programming and Data Structures), IIT Bhubaneshwar
 . We acknowledge the guidance and support provided by the faculty and mentors throughout the project.
 
 • The Two-Player-Chess logic is based on the open-source library raylib. We thank the developers for their valuable contribution.
