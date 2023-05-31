@@ -30,10 +30,10 @@ int positions[8][8] = {{1, 1, 1, 1, 1, 1, 1, 1},
                        {2, 2, 2, 2, 2, 2, 2, 2},
                        {2, 2, 2, 2, 2, 2, 2, 2}}; // Positions of all the chess pieces on the Chess Board
 // 1 -> black  2->white
-int piecesel = -1; // 1 for black piece selected , 2 for white piece selected , -1 for black moved , -2 for white moved 
-Rectangle CurrRec = {100, 100, 100, 100}; // selected rectangle
-int check2 = 0; // check for white king
-int check1 = 0; // check for black king
+int piecesel = -1; // 1 for black piece selected , 2 for white piece selected ,
+Rectangle CurrRec = {100, 100, 100, 100};
+int check2 = 0;
+int check1 = 0;
 int wkingmove = 0, wrook2move = 0, wrook1move = 0, bkingmove = 0, brook1move = 0, brook2move = 0;
 int checkmateOrNot = 0;
 Sound moveSound;
@@ -151,6 +151,7 @@ int main()
             Rectangle bkrec = {pieces[20].x, pieces[20].y, 100, 100};
             DrawRectangleLinesEx(bkrec, 5, RED);
         }
+        // Load PNG's of Chess Pieces from Folder-"VSCODE"
         DrawTextureEx(wrook, pieces[0], 0, 1.5, WHITE);
         DrawTextureEx(wbishop, pieces[2], 0, 1.5, WHITE);
         DrawTextureEx(wknight, pieces[1], 0, 1.5, WHITE);
@@ -258,7 +259,7 @@ void UpdateGame()
     {
         int x = (GetMouseX() / 100) * 100;
         int y = (GetMouseY() / 100) * 100;
-        if (piecesel < 0) // if no piece is selected
+        if (piecesel < 0)
         {
             CurrRec.x = x;
             CurrRec.y = y;
@@ -278,7 +279,6 @@ void UpdateGame()
                     {
                         // Move the piece to selected square
                         move(i, x, y);
-                        PlayChessMoveSound(0);
                         // Following Conditions are to Check if Castling the King is allowed or not
                         if (i == 0)
                         {
@@ -338,17 +338,15 @@ void UpdateGame()
         {
             check2 = 1;
         }
-        else{
+        else
             check2 = 0;
-        }
         Vector2 bkingpos = {pieces[20].x, pieces[20].y};
         if (check(bkingpos))
         {
             check1 = 1;
         }
-        else{
+        else
             check1 = 0;
-        }
     }
 }
 //------------------------------------------------------
@@ -575,7 +573,7 @@ int checkmove(int i, int x, int y)
     piecesel = -(piecesel ^ 3);
     return 0;
 }
-int latestKill = 48;
+int latestKill = 32;
 //-------------------------------------------------
 // Function to Move chess piece to selected square
 //-------------------------------------------------
@@ -591,13 +589,27 @@ void move(int i, int x, int y)
             break;
         }
         else
-            latestKill = 498;
+            latestKill = 32;
     }
     positions[(int)CurrRec.y / 100][(int)CurrRec.x / 100] = 0;
     positions[y / 100][x / 100] = piecesel;
     piecesel *= -1;
     pieces[i].x = x;
     pieces[i].y = y;
+    // Updation of Positions of Chess Pieces
+    printf("\n---------------------------\n");
+
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            printf("%d ", positions[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n---------------------------\n");
+    if(!c)
+    PlayChessMoveSound(0);
 }
 
 //-------------------------------------------------
@@ -611,13 +623,24 @@ void revert(int i, int x, int y)
     pieces[i].y = CurrRec.y;
     piecesel *= -1;
     positions[(int)CurrRec.y / 100][(int)CurrRec.x / 100] = piecesel;
-    if (latestKill != 48)
+    if (latestKill != 32)
     {
         positions[y / 100][x / 100] = piecesel ^ 3;
         pieces[latestKill].x = x;
         pieces[latestKill].y = y;
-        latestKill = 48;
+        latestKill = 32;
     }
+    // Updation of Positions of Chess Pieces
+    printf("\n----------------------\n");
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            printf("%d ", positions[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n-----------------\n");
 }
 //--------------------------------------------------
 // Function which Checks if King is in danger or not
@@ -640,10 +663,6 @@ bool check(Vector2 pos)
         k = 1;
         for (int m = 0; m < 8; m++)
             p[m] = 40 + m;
-    }
-    // If check by King
-    if(abs(pieces[4].x - pieces[20].x) <= 100 && abs(pieces[4].y - pieces[20].y) <= 100){
-        return true;
     }
     // IF Check is by Knight
     if ((abs(pos.x - pieces[1 + j].x) + abs(pos.y - pieces[1 + j].y) == 300) && ((pos.x - pieces[1 + j].x != 0) && (pos.y - pieces[1 + j].y != 0)))
@@ -820,7 +839,7 @@ bool check(Vector2 pos)
     return false;
 }
 //-----------------------------------------
-// Game Over Condition- CHECKMATE/STALEMATE
+// Game Over Condition- CHECKMATE
 //-----------------------------------------
 int IsGameOver()
 {
@@ -854,6 +873,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("1000 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -864,6 +884,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("2 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -880,6 +901,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("3 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -890,6 +912,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("4 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -906,6 +929,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("5 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -916,6 +940,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("6 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -932,6 +957,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("7");
                             }
                             revert(i, pieces[i].x, j);
                         }
@@ -941,13 +967,22 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1;\
+                                hasValidMoves = 1;
+                                printf("8");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
                         }
                         else
                             break;
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
                     }
                 }
                 else if (i == 2 || i == 5)
@@ -961,6 +996,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("9");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -971,6 +1007,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("10");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -987,8 +1024,9 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("11");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 1)
                         {
@@ -997,6 +1035,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("12");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1013,6 +1052,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("13");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1023,6 +1063,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("14");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1039,6 +1080,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("15");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1049,12 +1091,21 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("16");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
                         }
                         else
                             break;
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
                     }
                 }
 
@@ -1069,8 +1120,9 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("%d", j);
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 1)
                         {
@@ -1079,8 +1131,9 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("18");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1095,8 +1148,9 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("19");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 1)
                         {
@@ -1104,9 +1158,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("20");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1120,9 +1175,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("21");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 1)
                         {
@@ -1130,9 +1186,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("22");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1146,9 +1203,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("23");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 1)
                         {
@@ -1156,9 +1214,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("24 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1172,9 +1231,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("25 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, pieces[i].y);
                         }
                         else if (positions[((int)pieces[i].y) / 100][j / 100] == 1)
                         {
@@ -1182,7 +1242,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("26 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1198,9 +1259,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("27 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, pieces[i].y);
                         }
                         else if (positions[((int)pieces[i].y) / 100][j / 100] == 1)
                         {
@@ -1208,9 +1270,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("28 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, pieces[i].y);
                             break;
                         }
                         else
@@ -1224,9 +1287,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("29 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                         }
                         else if (positions[j / 100][((int)pieces[i].x) / 100] == 1)
                         {
@@ -1234,9 +1298,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("30 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                             break;
                         }
                         else
@@ -1250,9 +1315,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("31 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                         }
                         else if (positions[j / 100][((int)pieces[i].x) / 100] == 1)
                         {
@@ -1260,13 +1326,22 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("32 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                             break;
                         }
                         else
                             break;
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
                     }
                 }
 
@@ -1281,6 +1356,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("33 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1294,6 +1370,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("34 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1307,6 +1384,7 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("35 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1319,7 +1397,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("36 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1332,7 +1411,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("37 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1345,7 +1425,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("38 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1358,7 +1439,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("39 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1371,10 +1453,19 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("40 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
                     }
                 }
 
@@ -1388,7 +1479,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("a");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1401,7 +1493,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("b");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1414,7 +1507,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("c");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1427,7 +1521,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("d");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1440,7 +1535,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("e");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1453,7 +1549,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("r");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1466,7 +1563,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("f");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1479,10 +1577,19 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("g");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
                     }
                 }
                 else
@@ -1495,7 +1602,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("97 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1505,7 +1613,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("96 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1517,7 +1626,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("95 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -1530,7 +1640,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("94 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -1544,7 +1655,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("93 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1556,7 +1668,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("92 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -1569,7 +1682,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[4].x, pieces[4].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("91 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -1604,10 +1718,11 @@ int IsGameOver()
                         if (positions[((int)pieces[i].y) / 100][j / 100] == 0)
                         {
                             move(i, j, pieces[i].y);
-                            Vector2 bkingpos = {pieces[20].x, pieces[20].y};
-                            if (!check(bkingpos))
+                            Vector2 wkingpos = {pieces[20].x, pieces[20].y};
+                            if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("1000 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1617,7 +1732,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("2 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1633,7 +1749,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("3 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1643,7 +1760,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("4 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1659,7 +1777,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("5 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1669,7 +1788,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("6 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1685,9 +1805,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("7");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                         }
                         else if (positions[j / 100][(int)pieces[i].x / 100] == 2)
                         {
@@ -1695,14 +1816,23 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("8");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
                         }
                         else
                             break;
-                    } 
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
+                    }
                 }
                 else if (i == 18 || i == 21)
                 {
@@ -1714,7 +1844,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("9");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1724,7 +1855,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("10");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1740,9 +1872,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("11");
                             }
-                            revert(i,pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 2)
                         {
@@ -1750,7 +1883,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("12");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1766,7 +1900,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("13");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1776,7 +1911,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("14");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1792,7 +1928,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("15");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -1802,13 +1939,22 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("16");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
                         }
                         else
                             break;
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
                     }
                 }
 
@@ -1823,8 +1969,9 @@ int IsGameOver()
                             if (!check(wkingpos))
                             {
                                 hasValidMoves = 1;
+                                printf("%d", j);
                             }
-                            revert(i,pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 2)
                         {
@@ -1832,9 +1979,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("18");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1848,9 +1996,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("19");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 2)
                         {
@@ -1858,9 +2007,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("20");
                             }
-                            revert(i,pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1874,9 +2024,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("21");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 2)
                         {
@@ -1884,9 +2035,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("22");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1900,9 +2052,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("23");
                             }
-                            revert(i,pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                         }
                         else if (positions[k / 100][j / 100] == 2)
                         {
@@ -1910,9 +2063,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("24 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, k);
                             break;
                         }
                         else
@@ -1926,9 +2080,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("25 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, pieces[i].y);
                         }
                         else if (positions[((int)pieces[i].y) / 100][j / 100] == 2)
                         {
@@ -1936,7 +2091,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("26 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                             break;
@@ -1952,9 +2108,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("27 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, pieces[i].y);
                         }
                         else if (positions[((int)pieces[i].y) / 100][j / 100] == 2)
                         {
@@ -1962,9 +2119,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("28 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, j, pieces[i].y);
                             break;
                         }
                         else
@@ -1978,9 +2136,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("29 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                         }
                         else if (positions[j / 100][((int)pieces[i].x) / 100] == 2)
                         {
@@ -1988,9 +2147,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("30 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                             break;
                         }
                         else
@@ -2004,9 +2164,10 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("31 ");
                             }
-                            revert(i, pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                         }
                         else if (positions[j / 100][((int)pieces[i].x) / 100] == 2)
                         {
@@ -2014,14 +2175,23 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("32 ");
                             }
-                            revert(i,pieces[i].x, pieces[i].y);
+                            revert(i, pieces[i].x, j);
                             break;
                         }
                         else
                             break;
-                    } 
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
+                    }
                 }
 
                 else if (i == 20)
@@ -2034,7 +2204,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("33 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2047,7 +2218,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("34 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2060,7 +2232,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("35 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2073,7 +2246,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("36 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2086,7 +2260,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("37 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2099,7 +2274,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("38 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2112,7 +2288,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("39 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2125,11 +2302,20 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("40 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
-                    } 
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
+                    }
                 }
 
                 else if (i == 17 || i == 22)
@@ -2142,7 +2328,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("a");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2155,7 +2342,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("b");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2168,7 +2356,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("c");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2181,7 +2370,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("d");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2194,7 +2384,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("e");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2207,7 +2398,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("r");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2220,7 +2412,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("f");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2233,11 +2426,20 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("g");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
-                    } 
+                    }
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            printf("%d ", positions[i][j]);
+                        }
+                        printf("\n");
+                    }
                 }
                 else
                 {
@@ -2249,7 +2451,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("97 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2259,7 +2462,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("96 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2271,7 +2475,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("95 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -2284,7 +2489,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("94 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -2298,7 +2504,8 @@ int IsGameOver()
                             Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                             if (!check(wkingpos))
                             {
-                                hasValidMoves = 1; 
+                                hasValidMoves = 1;
+                                printf("93 ");
                             }
                             revert(i, pieces[i].x, pieces[i].y);
                         }
@@ -2310,7 +2517,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("92 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -2323,7 +2531,8 @@ int IsGameOver()
                                 Vector2 wkingpos = {pieces[20].x, pieces[20].y};
                                 if (!check(wkingpos))
                                 {
-                                    hasValidMoves = 1; 
+                                    hasValidMoves = 1;
+                                    printf("91 ");
                                 }
                                 revert(i, pieces[i].x, pieces[i].y);
                             }
@@ -2338,6 +2547,7 @@ int IsGameOver()
     }
     CurrRec.x = 1000;
     CurrRec.y = 1000;
+    printf("\n------------------------------------------------------------------------------------------------------------------------\n");
     if (hasValidMoves == 0 && check3 == 1)
     {
         return 2;
@@ -2354,6 +2564,7 @@ int IsGameOver()
 //--------------------------------------------------
 void castle(int i, int x, int y)
 {
+    printf("%d %d", wrook2move, wkingmove);
     //----------------------------------------------
     // WHITE KING Castling
     //----------------------------------------------
