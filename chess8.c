@@ -358,7 +358,6 @@ int checkmove(int i, int x, int y)
 {
     if (positions[y / 100][x / 100] == piecesel)
     {
-        piecesel = -(piecesel ^ 3);
         return 0;
     }
     // ROOK Valid Moves
