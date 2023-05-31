@@ -2,7 +2,8 @@
 
 Two Player Chess aims to create a two-player chess game using C programming  language by raylib library. This README file provides an overview of the project, instructions for running the game, and additional information for contributors.
 
-![image](https://github.com/sohans1092004/Two-Player-Chess-1/assets/63198162/53b65252-7232-4eb9-8bec-426cf7df0a74)
+![image](https://github.com/sohans1092004/Two-Player-Chess-1/assets/128244277/c702d8d2-32fe-4de5-b467-8e2f44f80a89)
+
 
 
 # Features
