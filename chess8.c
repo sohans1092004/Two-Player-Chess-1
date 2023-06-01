@@ -59,7 +59,6 @@ void UnloadAudio()
     UnloadSound(moveSound);
     UnloadSound(castleSound);
     UnloadSound(checkSound);
-    UnloadSound(checkmateSound);
     UnloadSound(promotionSound);
 
     CloseAudioDevice();
@@ -140,7 +139,7 @@ int main()
             double seconds=1;
             while(GetTime()-time<seconds)
             {}
-             UnloadSound(checkmateSound);
+            CloseAudioDevice();
         }
         else if (checkmateOrNot == 1)
         {
@@ -211,6 +210,7 @@ int main()
     }
     // De-initialisation
     //---------------------------------------------------
+    UnloadAudio();
     CloseWindow(); // Close Window and OpenGL context
     //---------------------------------------------------
 }
