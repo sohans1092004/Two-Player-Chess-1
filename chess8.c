@@ -99,7 +99,7 @@ bool check(Vector2 pos);
 void pawnpromotion(int);
 int IsGameOver();
 bool Draw();
-int c=0;
+int c = 0;
 //---------------------------------------------------------------
 // Program Main Entry Point
 //---------------------------------------------------------------
@@ -135,10 +135,11 @@ int main()
         {
             DrawText("CHECKMATE", 250, 375, 50, RED);
             PlayChessMoveSound(3);
-            double time=GetTime();
-            double seconds=1;
-            while(GetTime()-time<seconds)
-            {}
+            double time = GetTime();
+            double seconds = 1;
+            while (GetTime() - time < seconds)
+            {
+            }
             CloseAudioDevice();
         }
         else if (checkmateOrNot == 1)
@@ -148,13 +149,13 @@ int main()
         if (check2 == 1)
         {
             Rectangle wkrec = {pieces[4].x, pieces[4].y, 100, 100};
-            DrawRectangleLinesEx(wkrec, 5, RED);            
+            DrawRectangleLinesEx(wkrec, 5, RED);
         }
         if (check1 == 1)
         {
             Rectangle bkrec = {pieces[20].x, pieces[20].y, 100, 100};
             DrawRectangleLinesEx(bkrec, 5, RED);
-                    }
+        }
         // Load PNG's of Chess Pieces from Folder-"VSCODE"
         DrawTextureEx(wrook, pieces[0], 0, 1.5, WHITE);
         DrawTextureEx(wbishop, pieces[2], 0, 1.5, WHITE);
@@ -259,7 +260,7 @@ void DrawBoard()
 //--------------------------------------------------
 void UpdateGame()
 {
-    c=0;
+    c = 0;
     if (IsMouseButtonPressed(0)) // Condition to Check if Mouse Button is Pressed or Not
     {
         int x = (GetMouseX() / 100) * 100;
@@ -342,8 +343,7 @@ void UpdateGame()
         if (check(wkingpos))
         {
             check2 = 1;
-             PlayChessMoveSound(2);
-            
+            PlayChessMoveSound(2);
         }
         else
             check2 = 0;
@@ -351,8 +351,7 @@ void UpdateGame()
         if (check(bkingpos))
         {
             check1 = 1;
-             PlayChessMoveSound(2);
-            
+            PlayChessMoveSound(2);
         }
         else
             check1 = 0;
@@ -540,7 +539,7 @@ int checkmove(int i, int x, int y)
         if ((pieces[i].x == (x + 200) && pieces[i].y == y) || (pieces[i].y == y && pieces[i].x == x - 200))
         {
             castle(i, x, y);
-            c=1;
+            c = 1;
             return 1;
         }
     }
@@ -617,8 +616,8 @@ void move(int i, int x, int y)
         printf("\n");
     }
     printf("\n---------------------------\n");
-    if(!c)
-    PlayChessMoveSound(0);
+    if (!c)
+        PlayChessMoveSound(0);
 }
 
 //-------------------------------------------------
@@ -758,7 +757,7 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-              return true;
+                return true;
             }
             else
                 break;
@@ -774,7 +773,7 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-              return true;
+                return true;
             }
             else
                 break;
@@ -790,7 +789,7 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-                 return true;
+                return true;
             }
             else
                 break;
@@ -811,6 +810,16 @@ bool check(Vector2 pos)
             else
                 break;
         }
+    }
+    // IF Check is by king
+    int x[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+    int y[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+    for (int i = 0; i < 8; i++)
+    {
+        int m = X + x[i] * 100;
+        int n = Y + y[i] * 100;
+        if (pieces[4 + j].x == m && pieces[4 + j].y == n)
+            return true;
     }
     // IF Check is by Pawn
     if (positions[Y / 100][X / 100] == 1)
@@ -1738,7 +1747,7 @@ int IsGameOver()
                         else
                             break;
                     }
-                  for (int j = pieces[i].x - 100; j >= 0; j -= 100)
+                    for (int j = pieces[i].x - 100; j >= 0; j -= 100)
                     {
                         if (positions[((int)pieces[i].y) / 100][j / 100] == 0)
                         {
@@ -2373,7 +2382,7 @@ int IsGameOver()
                             revert(i, pieces[i].x, pieces[i].y);
                         }
                     }
-                  if (pieces[i].x >= 200 && pieces[i].y >= 100)
+                    if (pieces[i].x >= 200 && pieces[i].y >= 100)
                     {
                         if (positions[((int)pieces[i].y - 100) / 100][((int)pieces[i].x - 200) / 100] != 1)
                         {
@@ -2757,25 +2766,25 @@ void pawnpromotion(int i)
 bool Draw()
 {
     int k = 0;
-    //TO Check Number of Captured Pieces
+    // TO Check Number of Captured Pieces
     for (int i = 0; i < 48; i++)
         if (pieces[i].x == 1800 && pieces[i].y == 1800)
             k++;
 
-    //DRAW CONDITION-1: Only Two Kings left on the ChessBoard
+    // DRAW CONDITION-1: Only Two Kings left on the ChessBoard
     if (k == 46)
     {
         return true;
     }
-    //DRAW CONDITION-2:
+    // DRAW CONDITION-2:
     else if (k == 45)
     {
-        //Case-1: Two Kings and One Knight
+        // Case-1: Two Kings and One Knight
         if ((pieces[1].x != 1800 && pieces[1].y != 1800) || (pieces[6].x != 1800 && pieces[6].y != 1800) || (pieces[17].x != 1800 && pieces[17].y != 1800) || (pieces[22].x != 1800 && pieces[22].y != 1800))
         {
             return true;
         }
-        //Case-1: Two Kings and One Bishop
+        // Case-1: Two Kings and One Bishop
         else if ((pieces[2].x != 1800 && pieces[2].y != 1800) || (pieces[5].x != 1800 && pieces[5].y != 1800) || (pieces[18].x != 1800 && pieces[18].y != 1800) || (pieces[21].x != 1800 && pieces[21].y != 1800))
         {
             return true;
@@ -2783,8 +2792,8 @@ bool Draw()
         else
             return false;
     }
-    //DRAW CONDITION-3:
-    //Case: Two Kings, White Bishop and Black Bishop on Opposite Squares
+    // DRAW CONDITION-3:
+    // Case: Two Kings, White Bishop and Black Bishop on Opposite Squares
     else if (k == 44)
     {
         if (((pieces[2].x != 1800 && pieces[2].y != 1800) && (pieces[21].x != 1800 && pieces[21].y != 1800)) || ((pieces[18].x != 1800 && pieces[18].y != 1800) && (pieces[5].x != 1800 && pieces[5].y != 1800)))
