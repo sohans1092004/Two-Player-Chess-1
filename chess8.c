@@ -46,11 +46,11 @@ void InitializeAudio()
     InitAudioDevice();
 
     // Load audio files
-    moveSound = LoadSound("audio/move-self.wav");
-    castleSound = LoadSound("audio/castle.wav");
-    checkSound = LoadSound("audio/move-check.wav");
-    checkmateSound = LoadSound("audio/move-check.wav");
-    promotionSound = LoadSound("audio/promote.wav");
+    moveSound = LoadSound("move-self.wav");
+    castleSound = LoadSound("castle.wav");
+    checkSound = LoadSound("move-check.wav");
+    checkmateSound = LoadSound("move-check.wav");
+    promotionSound = LoadSound("promote.wav");
 }
 
 void UnloadAudio()
@@ -110,18 +110,18 @@ int main()
     InitWindow(screenWidth, screenHeight, "CHESS");
     InitializeAudio();
     SetTargetFPS(60);
-    Texture2D wbishop = LoadTexture("images/White_Bishop.png");
-    Texture2D wknight = LoadTexture("images/White_Knight.png");
-    Texture2D wrook = LoadTexture("images/White_Rook.png");
-    Texture2D wking = LoadTexture("images/White_King.png");
-    Texture2D wqueen = LoadTexture("images/White_Queen.png");
-    Texture2D bbishop = LoadTexture("images/Black_Bishop.png");
-    Texture2D bknight = LoadTexture("images/Black_Knight.png");
-    Texture2D brook = LoadTexture("images/Black_Rook.png");
-    Texture2D bking = LoadTexture("images/Black_King.png");
-    Texture2D bqueen = LoadTexture("images/Black_Queen.png");
-    Texture2D bpawn = LoadTexture("images/Black_Pawn.png");
-    Texture2D wpawn = LoadTexture("images/White_Pawn.png");
+    Texture2D wbishop = LoadTexture("White_Bishop.png");
+    Texture2D wknight = LoadTexture("White_Knight.png");
+    Texture2D wrook = LoadTexture("White_Rook.png");
+    Texture2D wking = LoadTexture("White_King.png");
+    Texture2D wqueen = LoadTexture("White_Queen.png");
+    Texture2D bbishop = LoadTexture("Black_Bishop.png");
+    Texture2D bknight = LoadTexture("Black_Knight.png");
+    Texture2D brook = LoadTexture("Black_Rook.png");
+    Texture2D bking = LoadTexture("Black_King.png");
+    Texture2D bqueen = LoadTexture("Black_Queen.png");
+    Texture2D bpawn = LoadTexture("Black_Pawn.png");
+    Texture2D wpawn = LoadTexture("White_Pawn.png");
 
     // Main Chess Game Loop
     while (!WindowShouldClose()) // Detect Window close button or ESC Key
@@ -136,6 +136,11 @@ int main()
         {
             DrawText("CHECKMATE", 250, 375, 50, RED);
             PlayChessMoveSound(3);
+            double time=GetTime();
+            double seconds=1;
+            while(GetTime()-time<seconds)
+            {}
+             UnloadSound(checkmateSound);
         }
         else if (checkmateOrNot == 1)
         {
@@ -144,13 +149,13 @@ int main()
         if (check2 == 1)
         {
             Rectangle wkrec = {pieces[4].x, pieces[4].y, 100, 100};
-            DrawRectangleLinesEx(wkrec, 5, RED);
+            DrawRectangleLinesEx(wkrec, 5, RED);            
         }
         if (check1 == 1)
         {
             Rectangle bkrec = {pieces[20].x, pieces[20].y, 100, 100};
             DrawRectangleLinesEx(bkrec, 5, RED);
-        }
+                    }
         // Load PNG's of Chess Pieces from Folder-"VSCODE"
         DrawTextureEx(wrook, pieces[0], 0, 1.5, WHITE);
         DrawTextureEx(wbishop, pieces[2], 0, 1.5, WHITE);
@@ -337,6 +342,8 @@ void UpdateGame()
         if (check(wkingpos))
         {
             check2 = 1;
+             PlayChessMoveSound(2);
+            
         }
         else
             check2 = 0;
@@ -344,6 +351,8 @@ void UpdateGame()
         if (check(bkingpos))
         {
             check1 = 1;
+             PlayChessMoveSound(2);
+            
         }
         else
             check1 = 0;
@@ -668,12 +677,10 @@ bool check(Vector2 pos)
     if ((abs(pos.x - pieces[1 + j].x) + abs(pos.y - pieces[1 + j].y) == 300) && ((pos.x - pieces[1 + j].x != 0) && (pos.y - pieces[1 + j].y != 0)))
     {
         return true;
-        PlayChessMoveSound(2);
     }
     if (abs(pos.x - pieces[6 + j].x) + abs(pos.y - pieces[6 + j].y) == 300 && pos.x - pieces[6 + j].x != 0 && pos.y - pieces[6 + j].y != 0)
     {
         return true;
-        PlayChessMoveSound(2);
     }
     // IF Check is by Rook or Queen
     for (int i = X - 100; i >= 0; i = i - 100)
@@ -683,7 +690,6 @@ bool check(Vector2 pos)
             if ((pieces[j].x == (i / 100) * 100 && pieces[j].y == (Y / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (Y / 100) * 100) || (pieces[7 + j].x == (i / 100) * 100 && pieces[7 + j].y == (Y / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (Y / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (Y / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (Y / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (Y / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (Y / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (Y / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (Y / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (Y / 100) * 100))
             {
                 return true;
-                PlayChessMoveSound(2);
             }
             else
                 break;
@@ -700,7 +706,6 @@ bool check(Vector2 pos)
             if ((pieces[j].x == (i / 100) * 100 && pieces[j].y == (Y / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (Y / 100) * 100) || (pieces[7 + j].x == (i / 100) * 100 && pieces[7 + j].y == (Y / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (Y / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (Y / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (Y / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (Y / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (Y / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (Y / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (Y / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (Y / 100) * 100))
             {
                 return true;
-                PlayChessMoveSound(2);
             }
             else
                 break;
@@ -717,7 +722,6 @@ bool check(Vector2 pos)
             if ((pieces[j].x == (X / 100) * 100 && pieces[j].y == (i / 100) * 100) || (pieces[3 + j].x == (X / 100) * 100 && pieces[3 + j].y == (i / 100) * 100) || (pieces[7 + j].x == (X / 100) * 100 && pieces[7 + j].y == (i / 100) * 100) || (pieces[p[0]].x == (X / 100) * 100 && pieces[p[0]].y == (i / 100) * 100) || (pieces[p[1]].x == (X / 100) * 100 && pieces[p[1]].y == (i / 100) * 100) || (pieces[p[2]].x == (X / 100) * 100 && pieces[p[2]].y == (i / 100) * 100) || (pieces[p[3]].x == (X / 100) * 100 && pieces[p[3]].y == (i / 100) * 100) || (pieces[p[4]].x == (X / 100) * 100 && pieces[p[4]].y == (i / 100) * 100) || (pieces[p[5]].x == (X / 100) * 100 && pieces[p[5]].y == (i / 100) * 100) || (pieces[p[6]].x == (X / 100) * 100 && pieces[p[6]].y == (i / 100) * 100) || (pieces[p[7]].x == (X / 100) * 100 && pieces[p[7]].y == (i / 100) * 100))
             {
                 return true;
-                PlayChessMoveSound(2);
             }
             else
                 break;
@@ -734,7 +738,6 @@ bool check(Vector2 pos)
             if ((pieces[j].x == (X / 100) * 100 && pieces[j].y == (i / 100) * 100) || (pieces[3 + j].x == (X / 100) * 100 && pieces[3 + j].y == (i / 100) * 100) || (pieces[7 + j].x == (X / 100) * 100 && pieces[7 + j].y == (i / 100) * 100) || (pieces[p[0]].x == (X / 100) * 100 && pieces[p[0]].y == (i / 100) * 100) || (pieces[p[1]].x == (X / 100) * 100 && pieces[p[1]].y == (i / 100) * 100) || (pieces[p[2]].x == (X / 100) * 100 && pieces[p[2]].y == (i / 100) * 100) || (pieces[p[3]].x == (X / 100) * 100 && pieces[p[3]].y == (i / 100) * 100) || (pieces[p[4]].x == (X / 100) * 100 && pieces[p[4]].y == (i / 100) * 100) || (pieces[p[5]].x == (X / 100) * 100 && pieces[p[5]].y == (i / 100) * 100) || (pieces[p[6]].x == (X / 100) * 100 && pieces[p[6]].y == (i / 100) * 100) || (pieces[p[7]].x == (X / 100) * 100 && pieces[p[7]].y == (i / 100) * 100))
             {
                 return true;
-                PlayChessMoveSound(2);
             }
             else
                 break;
@@ -755,8 +758,7 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-                PlayChessMoveSound(2);
-                return true;
+              return true;
             }
             else
                 break;
@@ -772,8 +774,7 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-                PlayChessMoveSound(2);
-                return true;
+              return true;
             }
             else
                 break;
@@ -789,8 +790,7 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-                PlayChessMoveSound(2);
-                return true;
+                 return true;
             }
             else
                 break;
@@ -806,7 +806,6 @@ bool check(Vector2 pos)
         {
             if ((pieces[2 + j].x == (i / 100) * 100 && pieces[2 + j].y == (t / 100) * 100) || (pieces[3 + j].x == (i / 100) * 100 && pieces[3 + j].y == (t / 100) * 100) || (pieces[5 + j].x == (i / 100) * 100 && pieces[5 + j].y == (t / 100) * 100) || (pieces[p[0]].x == (i / 100) * 100 && pieces[p[0]].y == (t / 100) * 100) || (pieces[p[1]].x == (i / 100) * 100 && pieces[p[1]].y == (t / 100) * 100) || (pieces[p[2]].x == (i / 100) * 100 && pieces[p[2]].y == (t / 100) * 100) || (pieces[p[3]].x == (i / 100) * 100 && pieces[p[3]].y == (t / 100) * 100) || (pieces[p[4]].x == (i / 100) * 100 && pieces[p[4]].y == (t / 100) * 100) || (pieces[p[5]].x == (i / 100) * 100 && pieces[p[5]].y == (t / 100) * 100) || (pieces[p[6]].x == (i / 100) * 100 && pieces[p[6]].y == (t / 100) * 100) || (pieces[p[7]].x == (i / 100) * 100 && pieces[p[7]].y == (t / 100) * 100))
             {
-                PlayChessMoveSound(2);
                 return true;
             }
             else
@@ -821,7 +820,6 @@ bool check(Vector2 pos)
             if (((X - 100) == pieces[i].x && (Y + 100) == pieces[i].y) || ((X + 100) == pieces[i].x && (Y + 100) == pieces[i].y))
             {
                 return true;
-                PlayChessMoveSound(2);
             }
         }
     }
@@ -832,7 +830,6 @@ bool check(Vector2 pos)
             if (((X - 100) == pieces[i].x && (Y - 100) == pieces[i].y) || ((X + 100) == pieces[i].x && (Y - 100) == pieces[i].y))
             {
                 return true;
-                PlayChessMoveSound(2);
             }
         }
     }
