@@ -2768,9 +2768,9 @@ bool Draw()
     int k = 0;
     // TO Check Number of Captured Pieces
     for (int i = 0; i < 48; i++)
-        if (pieces[i].x == 1800 && pieces[i].y == 1800)
+    { if (pieces[i].x == 1800 && pieces[i].y == 1800)
             k++;
-
+    }
     // DRAW CONDITION-1: Only Two Kings left on the ChessBoard
     if (k == 46)
     {
