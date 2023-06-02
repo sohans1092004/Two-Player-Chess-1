@@ -46,11 +46,11 @@ void InitializeAudio()
     InitAudioDevice();
 
     // Load audio files
-    moveSound = LoadSound("move-self.wav");
-    castleSound = LoadSound("castle.wav");
-    checkSound = LoadSound("move-check.wav");
-    checkmateSound = LoadSound("move-check.wav");
-    promotionSound = LoadSound("promote.wav");
+    moveSound = LoadSound("audio/move-self.wav");
+    castleSound = LoadSound("audio/castle.wav");
+    checkSound = LoadSound("audio/move-check.wav");
+    checkmateSound = LoadSound("audio/move-check.wav");
+    promotionSound = LoadSound("audio/promote.wav");
 }
 
 void UnloadAudio()
@@ -109,18 +109,18 @@ int main()
     InitWindow(screenWidth, screenHeight, "CHESS");
     InitializeAudio();
     SetTargetFPS(60);
-    Texture2D wbishop = LoadTexture("White_Bishop.png");
-    Texture2D wknight = LoadTexture("White_Knight.png");
-    Texture2D wrook = LoadTexture("White_Rook.png");
-    Texture2D wking = LoadTexture("White_King.png");
-    Texture2D wqueen = LoadTexture("White_Queen.png");
-    Texture2D bbishop = LoadTexture("Black_Bishop.png");
-    Texture2D bknight = LoadTexture("Black_Knight.png");
-    Texture2D brook = LoadTexture("Black_Rook.png");
-    Texture2D bking = LoadTexture("Black_King.png");
-    Texture2D bqueen = LoadTexture("Black_Queen.png");
-    Texture2D bpawn = LoadTexture("Black_Pawn.png");
-    Texture2D wpawn = LoadTexture("White_Pawn.png");
+    Texture2D wbishop = LoadTexture("images/White_Bishop.png");
+    Texture2D wknight = LoadTexture("images/White_Knight.png");
+    Texture2D wrook = LoadTexture("images/White_Rook.png");
+    Texture2D wking = LoadTexture("images/White_King.png");
+    Texture2D wqueen = LoadTexture("images/White_Queen.png");
+    Texture2D bbishop = LoadTexture("images/Black_Bishop.png");
+    Texture2D bknight = LoadTexture("images/Black_Knight.png");
+    Texture2D brook = LoadTexture("images/Black_Rook.png");
+    Texture2D bking = LoadTexture("images/Black_King.png");
+    Texture2D bqueen = LoadTexture("images/Black_Queen.png");
+    Texture2D bpawn = LoadTexture("images/Black_Pawn.png");
+    Texture2D wpawn = LoadTexture("images/White_Pawn.png");
 
     // Main Chess Game Loop
     while (!WindowShouldClose()) // Detect Window close button or ESC Key
