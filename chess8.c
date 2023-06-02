@@ -581,7 +581,7 @@ int checkmove(int i, int x, int y)
     piecesel = -(piecesel ^ 3);
     return 0;
 }
-int latestKill = 32;
+int latestKill = 48;
 //-------------------------------------------------
 // Function to Move chess piece to selected square
 //-------------------------------------------------
@@ -597,7 +597,7 @@ void move(int i, int x, int y)
             break;
         }
         else
-            latestKill = 32;
+            latestKill = 48;
     }
     positions[(int)CurrRec.y / 100][(int)CurrRec.x / 100] = 0;
     positions[y / 100][x / 100] = piecesel;
@@ -631,12 +631,12 @@ void revert(int i, int x, int y)
     pieces[i].y = CurrRec.y;
     piecesel *= -1;
     positions[(int)CurrRec.y / 100][(int)CurrRec.x / 100] = piecesel;
-    if (latestKill != 32)
+    if (latestKill != 48)
     {
         positions[y / 100][x / 100] = piecesel ^ 3;
         pieces[latestKill].x = x;
         pieces[latestKill].y = y;
-        latestKill = 32;
+        latestKill = 48;
     }
     // Updation of Positions of Chess Pieces
     printf("\n----------------------\n");
